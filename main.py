@@ -1,8 +1,14 @@
-from helpers.config import *
+from helpers.config import load_credentials
+from spotify.credentials import auth_user, create_instance
+from spotify.loader import get_songs
 
 
 def main():
+    playlist_url = "https://open.spotify.com/playlist/2odeDPVVEP0MEvwqpTnMLN"
     spotify_id, spotify_secret, drive_key = load_credentials()
+    token = auth_user(client_id=spotify_id, client_secret=spotify_secret)
+    spotipy_ins = create_instance(token)
+    songs = get_songs(spotipy_ins, playlist_url)
 
 
 if __name__ == "__main__":
