@@ -4,6 +4,7 @@ from spotify.loader import get_songs, get_name
 from youtube.download import download_songs
 from drive.auth import authenticate
 from drive.upload import upload_folder
+from helpers.clear import delete_downloads
 
 
 def main():
@@ -16,6 +17,7 @@ def main():
     download_songs(songs)
     drive_instance = authenticate()
     upload_folder(drive_instance, playlist_name)
+    delete_downloads()
 
 
 if __name__ == "__main__":
