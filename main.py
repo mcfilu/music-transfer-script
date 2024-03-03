@@ -1,6 +1,7 @@
 from helpers.config import load_credentials
 from spotify.credentials import auth_user, create_instance
 from spotify.loader import get_songs
+from youtube.download import download_songs
 
 
 def main():
@@ -9,6 +10,7 @@ def main():
     token = auth_user(client_id=spotify_id, client_secret=spotify_secret)
     spotipy_ins = create_instance(token)
     songs = get_songs(spotipy_ins, playlist_url)
+    download_songs(songs)
 
 
 if __name__ == "__main__":
