@@ -1,0 +1,5 @@
+{
+    "spotify_id": "your_spotify_client_id",
+    "spotify_secret": "your_spotify_client_secret",
+    "drive_key": "your_google_drive_api_key"
+}
