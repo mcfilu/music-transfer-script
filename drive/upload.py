@@ -1,11 +1,14 @@
 from pydrive.drive import GoogleDrive
+from helpers.config import determine_temp_music_path
 import os
 
 
-def upload_file(drive, song):
-    file1 = drive.CreateFile({'title': 'Hello.txt'})  # Create GoogleDriveFile instance with title 'Hello.txt'.
-    file1.SetContentString('Hello World!') # Set content of the file from given string.
-    file1.Upload()
+def upload_file(drive, song_name, folder_id):
+    new_song = drive.CreateFile({"parents": [{"kind": "drive#fileLink", "id": folder_id}],
+                                 "title": song_name, "mimeType": "audio/mp4"})
+    song_path = os.path.join(determine_temp_music_path(), song_name)
+    new_song.SetContentFile(song_path)
+    new_song.Upload()
 
 
 def upload_folder(gauth, folder_name):
@@ -16,12 +19,11 @@ def upload_folder(gauth, folder_name):
     folder = drive.CreateFile(folder_metadata)
     folder.Upload()
 
-    # Upload file to folder
     folder_id = folder['id']
-    file = drive.CreateFile({"parents": [{"kind": "drive#fileLink", "id": folder_id}]})
-    file.SetContentFile('testfile.txt')
-    file.Upload()
 
-    # songs = os.listdir()
-    # for song in songs:
-    #     upload_file(drive, song)
+    songs_folder_path = determine_temp_music_path()
+    print(songs_folder_path)
+    songs = os.listdir(songs_folder_path)
+    print(songs)
+    for song in songs:
+        upload_file(drive, song, folder_id)

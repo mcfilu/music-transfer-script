@@ -8,6 +8,12 @@ def determine_config_path():
     return config_path
 
 
+def determine_temp_music_path():
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    music_path = os.path.join(script_dir, '..', 'youtube', 'temp_songs_folder')
+    return music_path
+
+
 def check_file():
     config_path = determine_config_path()
     result = os.path.isfile(config_path)

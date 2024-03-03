@@ -2,6 +2,8 @@ from helpers.config import load_credentials
 from spotify.credentials import auth_user, create_instance
 from spotify.loader import get_songs, get_name
 from youtube.download import download_songs
+from drive.auth import authenticate
+from drive.upload import upload_folder
 
 
 def main():
@@ -12,6 +14,8 @@ def main():
     songs = get_songs(spotipy_ins, playlist_url)
     playlist_name = get_name(spotipy_ins, playlist_url)
     download_songs(songs)
+    drive_instance = authenticate()
+    upload_folder(drive_instance, playlist_name)
 
 
 if __name__ == "__main__":
