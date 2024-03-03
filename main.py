@@ -1,5 +1,7 @@
+from helpers.config import *
+
 def main():
-    pass
+    print(load_credentials())
 
 
 if __name__ == "__main__":
