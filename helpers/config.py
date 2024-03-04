@@ -27,10 +27,10 @@ def load_credentials():
     if check_file():
         with open(config_path, 'r') as cred_file:
             credentials = json.load(cred_file)
-            if not 'spotify_id' in credentials:
+            if 'spotify_id' not in credentials:
                 raise KeyError("spotify_id key has to be in the config.json file")
-            if not 'spotify_secret' in credentials:
+            if 'spotify_secret' not in credentials:
                 raise KeyError("spotify_secret key has to be in the config.json file")
-            if not 'drive_key' in credentials:
+            if 'drive_key' not in credentials:
                 raise KeyError("google_api key has to be in the config.json file")
             return credentials['spotify_id'], credentials['spotify_secret'], credentials['drive_key']

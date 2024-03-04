@@ -1,8 +1,6 @@
 import os
-import json
-import tempfile
 import pytest
-import shutil
+import json
 from helpers.config import (
     determine_config_path,
     determine_temp_music_path,
@@ -11,58 +9,42 @@ from helpers.config import (
 )
 
 
-
-@pytest.fixture
-def temp_folder():
-    temp_dir = tempfile.mkdtemp()
-    yield temp_dir
-    shutil.rmtree(temp_dir)
-
-
-@pytest.fixture
-def temp_config(temp_folder):
-    config_path = os.path.join(temp_folder, 'config.json')
-    with open(config_path,
-        "r") as f:
-        json.dump({"spotify_id": "your_spotify_id", "spotify_secret": "your_spotify_secret", "drive_key": "your_drive_key"}, f)
-        yield config_path
-
-
 def test_determine_config_path():
-    config_path = determine_config_path()
-    assert os.path.isfile(config_path)
+    expected_path = os.path.join(os.path.dirname(__file__), "..", "..", "config.json")
+    assert determine_config_path() == expected_path
 
 
 def test_determine_temp_music_path():
-    temp_music_path = determine_temp_music_path()
-    assert os.path.isdir(temp_music_path)
+    expected_path = os.path.join(os.path.dirname(__file__), "..", "youtube", "temp_songs_folder")
+    assert determine_temp_music_path() == expected_path
 
 
-def test_check_file_exists(temp_config):
-    assert check_file()
+def test_check_file_present():
+    config_path = determine_config_path()
+    with open(config_path, "w") as f:
+        f.write("{}")
+    assert check_file() is True
 
 
-def test_check_file_does_not_exist(temp_folder):
+def test_check_file_missing():
     with pytest.raises(FileNotFoundError):
         check_file()
 
 
-def test_load_credentials(temp_config):
-    spotify_id, spotify_secret, drive_key = load_credentials()
-    assert spotify_id == "your_spotify_id"
-    assert spotify_secret == "your_spotify_secret"
-    assert drive_key == "your_drive_key"
-
-
-def test_load_credentials_missing_keys(temp_folder):
-    config_path = os.path.join(temp_folder, 'config.json')
+def test_load_credentials_success():
+    config_path = determine_config_path()
     with open(config_path, "w") as f:
-        json.dump({"invalid_key": "value"}, f)
+        json.dump({"spotify_id": "id", "spotify_secret": "secret", "drive_key": "key"}, f)
+    spotify_id, spotify_secret, drive_key = load_credentials()
+    assert spotify_id == "id"
+    assert spotify_secret == "secret"
+    assert drive_key == "key"
+
+
+def test_load_credentials_missing_keys():
+    config_path = determine_config_path()
+    with open(config_path, "w") as f:
+        json.dump({"spotify_id": "id"}, f)
     with pytest.raises(KeyError):
-        load_credentials()
-
-
-def test_load_credentials_missing_file(temp_folder):
-    with pytest.raises(FileNotFoundError):
         load_credentials()
 
