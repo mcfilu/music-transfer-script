@@ -11,12 +11,12 @@ from helpers.config import (
 
 def test_determine_config_path():
     expected_path = os.path.join(os.path.dirname(__file__), "..", "..", "config.json")
-    assert determine_config_path() == expected_path
+    assert os.path.samefile(determine_config_path(), expected_path)
 
 
 def test_determine_temp_music_path():
-    expected_path = os.path.join(os.path.dirname(__file__), "..", "youtube", "temp_songs_folder")
-    assert determine_temp_music_path() == expected_path
+    expected_path = os.path.join(os.path.dirname(__file__), "..", "..", "youtube", "temp_songs_folder")
+    assert os.path.samefile(determine_temp_music_path(), expected_path)
 
 
 def test_check_file_present():
