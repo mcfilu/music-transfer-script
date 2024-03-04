@@ -34,5 +34,3 @@ def load_credentials():
             if not 'drive_key' in credentials:
                 raise KeyError("google_api key has to be in the config.json file")
             return credentials['spotify_id'], credentials['spotify_secret'], credentials['drive_key']
-
-load_credentials()
